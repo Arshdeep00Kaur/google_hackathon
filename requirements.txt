@@ -1,8 +1,0 @@
-google-generativeai
-python-dotenv
-langchain-google-genai
-langchain-qdrant
-langchain-community
-langchain-text-splitters
-pydantic
-langgraph

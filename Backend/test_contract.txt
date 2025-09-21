@@ -1,0 +1,13 @@
+This is a sample employment contract document.
+
+EMPLOYMENT AGREEMENT
+
+This Employment Agreement ("Agreement") is entered into between ABC Company ("Company") and John Doe ("Employee").
+
+TERMS:
+1. Position: Software Developer
+2. Salary: $75,000 per year
+3. Start Date: January 1, 2025
+4. Termination: Either party may terminate this agreement with 30 days written notice.
+
+This contract outlines the terms and conditions of employment.

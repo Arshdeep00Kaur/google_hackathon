@@ -1,0 +1,214 @@
+{
+  "info": {
+    "name": "Legal AI Queue System API - FIXED",
+    "description": "Complete API collection for Legal AI Backend with Queue System - URLs Fixed",
+    "version": "1.0.1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "api_base",
+      "value": "http://localhost:8000/api/v1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🏥 Health & Status",
+      "item": [
+        {
+          "name": "Root Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/"
+          }
+        },
+        {
+          "name": "System Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/health"
+          }
+        },
+        {
+          "name": "API Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{api_base}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "📄 Document Management",
+      "item": [
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "description": "Select a PDF, DOC, or DOCX file"
+                }
+              ]
+            },
+            "url": "{{api_base}}/documents/"
+          }
+        },
+        {
+          "name": "List Documents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{api_base}}/documents/"
+          }
+        },
+        {
+          "name": "Get Document Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{api_base}}/documents/doc_12345"
+          }
+        },
+        {
+          "name": "Delete Document",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{api_base}}/documents/doc_12345"
+          }
+        }
+      ]
+    },
+    {
+      "name": "💬 Query Management",
+      "item": [
+        {
+          "name": "Submit Query",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"What are the key terms in this contract?\",\n  \"context\": \"contract analysis\",\n  \"user_id\": \"user123\"\n}"
+            },
+            "url": "{{api_base}}/queries/"
+          }
+        },
+        {
+          "name": "List Queries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{api_base}}/queries/?limit=10&offset=0"
+          }
+        },
+        {
+          "name": "Get Query Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{api_base}}/queries/query_67890"
+          }
+        }
+      ]
+    },
+    {
+      "name": "⚡ Queue Job Management",
+      "item": [
+        {
+          "name": "Submit Chat Job to Queue",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"Explain the legal implications of this clause\",\n  \"user_id\": \"user123\",\n  \"session_id\": \"session456\"\n}"
+            },
+            "url": "{{api_base}}/jobs/submit-chat-job"
+          }
+        },
+        {
+          "name": "Submit Document Job to Queue",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "description": "Document file to process"
+                },
+                {
+                  "key": "metadata",
+                  "value": "{\"document_type\": \"contract\", \"priority\": \"high\"}",
+                  "type": "text",
+                  "description": "JSON metadata for the document"
+                }
+              ]
+            },
+            "url": "{{api_base}}/jobs/submit-document-job"
+          }
+        },
+        {
+          "name": "Get Job Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{api_base}}/jobs/job-status/job_abc123"
+          }
+        },
+        {
+          "name": "Get Queue Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{api_base}}/jobs/queue-stats"
+          }
+        },
+        {
+          "name": "Cancel Job",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{api_base}}/jobs/cancel-job/job_abc123"
+          }
+        },
+        {
+          "name": "Clear Failed Jobs",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{api_base}}/jobs/clear-failed"
+          }
+        }
+      ]
+    }
+  ]
+}

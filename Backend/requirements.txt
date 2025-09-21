@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+python-multipart
+google-generativeai
+python-dotenv
+langchain-google-genai
+langchain-qdrant
+langchain-community
+langchain-text-splitters
+pydantic
+langgraph
+typing-extensions
+# Queue and Database dependencies
+redis
+rq
+pymongo
+# Note: Valkey is Redis-compatible, so we use redis package

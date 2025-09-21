@@ -1,0 +1,101 @@
+services:
+  # Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant
+    container_name: legal_ai_qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    restart: unless-stopped
+    networks:
+      - legal_ai_network
+
+  # Valkey (Redis Alternative) for Queue System
+  valkey:
+    image: valkey/valkey:latest
+    container_name: legal_ai_valkey
+    ports:
+      - "6379:6379"
+    volumes:
+      - valkey_data:/data
+    restart: unless-stopped
+    networks:
+      - legal_ai_network
+    command: valkey-server --appendonly yes
+
+  # MongoDB for Job Tracking
+  mongodb:
+    image: mongo:7.0
+    container_name: legal_ai_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: legal_ai_jobs
+    restart: unless-stopped
+    networks:
+      - legal_ai_network
+
+  # FastAPI Backend Application
+  backend:
+    build: .
+    container_name: legal_ai_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - VALKEY_HOST=valkey
+      - VALKEY_PORT=6379
+      - MONGODB_URL=mongodb://admin:password@mongodb:27017/
+      - MONGODB_DATABASE=legal_ai_jobs
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      - qdrant
+      - valkey
+      - mongodb
+    restart: unless-stopped
+    networks:
+      - legal_ai_network
+    volumes:
+      - .:/app
+    working_dir: /app
+
+  # RQ Worker for Background Jobs
+  worker:
+    build: .
+    container_name: legal_ai_worker
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - VALKEY_HOST=valkey
+      - VALKEY_PORT=6379
+      - MONGODB_URL=mongodb://admin:password@mongodb:27017/
+      - MONGODB_DATABASE=legal_ai_jobs
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      - qdrant
+      - valkey
+      - mongodb
+      - backend
+    restart: unless-stopped
+    networks:
+      - legal_ai_network
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: python Queue/worker.py
+
+networks:
+  legal_ai_network:
+    driver: bridge
+
+volumes:
+  qdrant_storage:
+    driver: local
+  valkey_data:
+    driver: local
+  mongodb_data:
+    driver: local
